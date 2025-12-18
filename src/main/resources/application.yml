@@ -1,0 +1,48 @@
+spring:
+  kafka:
+    bootstrap-servers: kafka.lavacro.net:9092
+    consumer:
+      group-id: 'traffic-mon-fanout-CG'
+      auto-offset-reset: latest
+      max-poll-records: 500
+      enable-auto-commit: false
+      client-id: 'traffic-consumer'
+      key-deserializer: 'org.springframework.kafka.support.serializer.ErrorHandlingDeserializer'
+      value-deserializer: 'org.springframework.kafka.support.serializer.ErrorHandlingDeserializer'
+      properties:
+        spring.deserializer.key.delegate.class: 'org.apache.kafka.common.serialization.StringDeserializer'
+        spring.deserializer.value.delegate.class: 'net.lavacro.traffic_mon.config.UlogdDeserializer'
+        max.poll.interval.ms: 60000
+        session.timeout.ms: 30000
+        heartbeat.interval.ms: 10000
+      fetch-min-size: 4096
+      fetch-max-wait: 100
+    listener:
+      ack-mode: manual
+      concurrency: 2
+      type: batch
+
+server:
+  port: 8080
+  undertow:
+    threads:
+      worker: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+application:
+  mongodb:
+    uri: 'mongodb://mongodb.lavacro.net:27017/trafficMon?authSource=admin'
+    database: trafficMon
+    collection: allTraffic
+
+kafka:
+  topics: "traffic-topic-00,traffic-topic-01,traffic-topic-02,traffic-topic-03"

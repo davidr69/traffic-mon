@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-mon-app
+  labels:
+    app: traffic-mon
+    tier: middleware
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: middleware
+  template:
+    metadata:
+      labels:
+        app: traffic-mon
+        tier: middleware
+    spec:
+      volumes:
+      - name: vault-token
+        emptyDir:
+          sizeLimit: 1Mi
+          medium: Memory
+      initContainers:
+      - name: vault-retrieve
+        image: "pi4apps:5000/vault-retrieve:3.0.1"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MOUNT_PATH
+            value: "/var/tmp/vault"
+          - name: SPRING_APPLICATION_NAME
+            value: vault
+          - name: SPRING_PROFILES_ACTIVE
+            value: dbprod
+          - name: SPRING_CLOUD_CONFIG_LABEL
+            value: main
+          - name: SPRING_CONFIG_IMPORT
+            value: "configserver:http://configs.lavacro.net:9080/"
+        volumeMounts:
+          - name: vault-token
+            mountPath: "/var/tmp/vault"
+      containers:
+        - name: traffic-mon
+          image: "pi4apps:5000/traffic-mon:2.0.3"
+          imagePullPolicy: IfNotPresent
+          env:
+#           - name: profile
+#             value: ext
+           - name: additional_properties
+             value: "/var/tmp/vault/vault.properties"
+          volumeMounts:
+          - name: vault-token
+            mountPath: "/var/tmp/vault"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "1500m" # 1.5 CPU
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            timeoutSeconds: 60
+            #          initialDelaySeconds: 60
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            timeoutSeconds: 3
+            initialDelaySeconds: 60
