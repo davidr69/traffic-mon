@@ -16,9 +16,9 @@ import java.util.List;
 public class MyConsumer {
 	private final SpawnThreads  spawnThreads;
 
-	@KafkaListener(topics = "#{'${kafka.topics}'.split(',')}", batch = "true", containerFactory = "kafkaListenerContainerFactory")
+	@KafkaListener(topics = "#{'${kafka.topics}'.split(',')}", batch = "true")
 	public void listen(List<ConsumerRecord<String, Ulogd>> messages, Acknowledgment ack) {
-		log.info("{} messages received", messages.size());
+		log.info("{} messages received on topic {}", messages.size(), messages.getFirst().topic());
 		spawnThreads.process(
 				messages.stream().map(ConsumerRecord::value).toList()
 		);

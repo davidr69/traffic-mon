@@ -48,7 +48,6 @@ public class HashAndPersist {
 						data.getSrcIp(), data.getDestIp(), data.getDestPort(), data.getIpProtocol());
 				long[] hash = xxh128.hashBytes(str.getBytes(StandardCharsets.UTF_8));
 
-				log.info("Persisting ...");
 				// Convert the 128-bit hash (two longs) into 16 bytes for MongoDB _id
 				byte[] hashBytes = ByteBuffer.allocate(16)
 						.order(ByteOrder.BIG_ENDIAN)
@@ -60,22 +59,22 @@ public class HashAndPersist {
 				// all sources are internal and resolvable, so let's find hostnames ...
 				InetAddress addr = InetAddress.getByName(data.getSrcIp());
 
-//				UpdateOneModel<Document> update = new UpdateOneModel<>(
-//						Filters.eq("_id", id),
-//						Updates.combine(
-//								Updates.inc("count", 1),
-//								Updates.setOnInsert("sourceIP", data.getSrcIp()),
-//								Updates.setOnInsert("destIP", data.getDestIp()),
-//								Updates.setOnInsert("protocol", data.getIpProtocol()),
-//								Updates.setOnInsert("port", data.getDestPort()),
-//								Updates.setOnInsert("firstSeen", data.getTimestamp().toInstant()),
-//								Updates.set("lastSeen", data.getTimestamp().toInstant()),
-//								Updates.setOnInsert("sourceHost", addr.getHostName())
-//						),
-//						new UpdateOptions().upsert(true)
-//				);
-//
-//				ops.add(update);
+				UpdateOneModel<Document> update = new UpdateOneModel<>(
+						Filters.eq("_id", id),
+						Updates.combine(
+								Updates.inc("count", 1),
+								Updates.setOnInsert("sourceIP", data.getSrcIp()),
+								Updates.setOnInsert("destIP", data.getDestIp()),
+								Updates.setOnInsert("protocol", data.getIpProtocol()),
+								Updates.setOnInsert("port", data.getDestPort()),
+								Updates.setOnInsert("firstSeen", data.getTimestamp().toInstant()),
+								Updates.set("lastSeen", data.getTimestamp().toInstant()),
+								Updates.setOnInsert("sourceHost", addr.getHostName())
+						),
+						new UpdateOptions().upsert(true)
+				);
+
+				ops.add(update);
 			}
 
 //			return collection.bulkWrite(ops, new BulkWriteOptions().ordered(false));
