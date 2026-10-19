@@ -1,5 +1,8 @@
-# Traffic Monitor (traffic-mon)
+# Network Traffic Monitor
 
+![diagram](images/traffic-mon.png)
+
+![topics](images/topics.png)
 
 
 ```javascript
