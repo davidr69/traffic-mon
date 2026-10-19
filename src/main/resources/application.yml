@@ -12,15 +12,14 @@ spring:
       properties:
         spring.deserializer.key.delegate.class: 'org.apache.kafka.common.serialization.StringDeserializer'
         spring.deserializer.value.delegate.class: 'net.lavacro.traffic_mon.config.UlogdDeserializer'
-        max.poll.interval.ms: 60000
-        session.timeout.ms: 30000
-        heartbeat.interval.ms: 10000
-      fetch-min-size: 4096
-      fetch-max-wait: 100
+        max.poll.interval.ms: 300000
+      fetch-min-size: 128
+      fetch-max-wait: 2s
     listener:
       ack-mode: manual
       concurrency: 2
       type: batch
+      poll-timeout: 2s
 
 server:
   port: 8080

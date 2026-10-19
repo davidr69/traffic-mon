@@ -1,5 +1,6 @@
 package net.lavacro.traffic_mon.process;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.lavacro.traffic_mon.model.Ulogd;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -11,15 +12,13 @@ import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MyConsumer {
 	private final SpawnThreads  spawnThreads;
 
-	public MyConsumer(SpawnThreads spawnThreads) {
-		this.spawnThreads = spawnThreads;
-	}
-
-	@KafkaListener(topics = "#{'${kafka.topics}'.split(',')}", batch = "true", containerFactory = "kafkaListenerContainerFactory")
+	@KafkaListener(topics = "#{'${kafka.topics}'.split(',')}", batch = "true")
 	public void listen(List<ConsumerRecord<String, Ulogd>> messages, Acknowledgment ack) {
+		log.info("{} messages received on topic {}", messages.size(), messages.getFirst().topic());
 		spawnThreads.process(
 				messages.stream().map(ConsumerRecord::value).toList()
 		);
