@@ -1,11 +1,16 @@
-FROM pi4apps:5000/awscorretto:25
+# Build stage
+ARG APP_VERSION="2.1.1"
 
-#ARG APP_NAME
-#ARG APP_VERSION
+FROM docker.io/gradle:9-jdk25 AS builder
+ARG APP_VERSION
+WORKDIR /build
+COPY . .
+RUN gradle build -x test
 
-COPY build/libs/traffic-mon-2.0.3.jar /app/
-
+# Runtime stage
+FROM registry:5000/awscorretto:25
+ARG APP_VERSION="2.1.1"
+COPY --from=builder /build/build/libs/traffic-mon-${APP_VERSION}.jar /app/traffic-mon.jar
 WORKDIR /app
 USER nobody
-
-ENTRYPOINT ["/bin/sh", "-c", "java -Dspring.profiles.active=$profile -Dspring.config.additional-location=$additional_properties -jar traffic-mon-2.0.3.jar"]
+ENTRYPOINT ["java", "-jar", "traffic-mon.jar"]
