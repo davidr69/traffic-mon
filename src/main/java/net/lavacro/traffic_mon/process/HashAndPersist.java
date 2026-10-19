@@ -77,8 +77,7 @@ public class HashAndPersist {
 				ops.add(update);
 			}
 
-//			return collection.bulkWrite(ops, new BulkWriteOptions().ordered(false));
-			return 0;
+			return collection.bulkWrite(ops, new BulkWriteOptions().ordered(false));
 		};
 	}
 }

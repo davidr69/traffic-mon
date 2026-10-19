@@ -2,8 +2,8 @@ spring:
   kafka:
     bootstrap-servers: kafka.lavacro.net:9092
     consumer:
-      group-id: 'traffic-mon-fanout-CG-test'
-      auto-offset-reset: earliest   #latest
+      group-id: 'traffic-mon-fanout-CG'
+      auto-offset-reset: latest
       max-poll-records: 500
       enable-auto-commit: false
       client-id: 'traffic-consumer'

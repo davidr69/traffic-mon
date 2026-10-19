@@ -18,15 +18,15 @@ spec:
     spec:
       containers:
         - name: traffic-mon
-          image: "pi4apps:5000/traffic-mon:2.0.3"
+          image: "registry:5000/traffic-mon:2.1.1"
           imagePullPolicy: IfNotPresent
           resources:
             requests:
               memory: "256Mi"
               cpu: "250m"
             limits:
-              memory: "1Gi"
-              cpu: "1500m" # 1.5 CPU
+              memory: "512Mi"
+              cpu: "500m" # 0.5 CPU
           readinessProbe:
             httpGet:
               path: /actuator/health
