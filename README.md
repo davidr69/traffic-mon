@@ -16,6 +16,11 @@ Aside from the main topic and the 4 subtopics, Kafka Connect implicitly creates 
 
 ![topics](images/topics.png)
 
+Within each topic, there 4 partitions:
+
+![partitions](images/partitions.png)
+
+
 ## Persisting messages
 
 In order to perform the aforementioned upserts, we must first locate the document that contains the statistics for the destination. A string is crafted and hashed using XXH128, which produces 16 bytes. A Java `Long` is 8 bytes, so 2 Longs can hold the hash. Those 2 Longs are used as the index, rather than maintaining a separate hash field and indexing it:
