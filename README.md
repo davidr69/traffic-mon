@@ -8,7 +8,7 @@ Having insight into connections made by users is indispensable. While Pi-Hole is
 
 ### Tracking connections
 
-Every network packet does not need to be inspected, only outgoing packets which are not in the state table. A specially-crafted iptables rule captures those and logs them, which is then picked up by ulogd2. My C++ log scraper (should be a ulogd2 plugin) publishes a Kafka message, which is then sent to 1 of 4 partitions by my [custom Kafka Connect plugin](https://github.com/davidr69/kafka-connect-fanout), using round-robin. Depending on how many messages were received in the batch, an upsert is made in MongoDB with qualifying messages:
+Every network packet does not need to be inspected, only outgoing packets which are not in the state table. A specially-crafted iptables rule captures those and logs them, which is then picked up by ulogd2. My C++ log scraper (should be a ulogd2 plugin) publishes a Kafka message, which is then sent to 1 of 4 topics by my [custom Kafka Connect plugin](https://github.com/davidr69/kafka-connect-fanout), using round-robin. Depending on how many messages were received in the batch, an upsert is made in MongoDB with qualifying messages:
 
 ![diagram](images/traffic-mon.png)
 
