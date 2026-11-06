@@ -9,11 +9,10 @@ version = '2.1.2'
 description = 'Spring Kafka consumer for firewall data'
 
 //def javaVersion = System.getProperty('os.arch') == 'aarch64' ? 27 : 25
-def javaVersion = 27
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(javaVersion)
+		languageVersion = JavaLanguageVersion.of(27)
 	}
 }
 
