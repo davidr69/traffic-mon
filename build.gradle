@@ -1,14 +1,15 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '4.1.1'
+	id 'org.springframework.boot' version '4.1.2'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'net.lavacro'
-version = '2.1.1'
+version = '2.1.2'
 description = 'Spring Kafka consumer for firewall data'
 
-def javaVersion = System.getProperty('os.arch') == 'aarch64' ? 26 : 25
+//def javaVersion = System.getProperty('os.arch') == 'aarch64' ? 27 : 25
+def javaVersion = 27
 
 java {
 	toolchain {
@@ -34,7 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	implementation 'org.apache.kafka:connect-json:4.3.2'
+	implementation 'org.apache.kafka:connect-json:4.4.0'
 
 	compileOnly 'org.projectlombok:lombok:1.18.48'
 
