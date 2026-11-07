@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: traffic-mon
-          image: "registry:5000/traffic-mon:2.1.1"
+          image: "registry:5000/traffic-mon:2.1.3"
           imagePullPolicy: IfNotPresent
           resources:
             requests:
