@@ -12,6 +12,7 @@ spring:
       properties:
         spring.deserializer.key.delegate.class: 'org.apache.kafka.common.serialization.StringDeserializer'
         spring.deserializer.value.delegate.class: 'net.lavacro.traffic_mon.config.UlogdDeserializer'
+        group.protocol: consumer
         max.poll.interval.ms: 300000
       fetch-min-size: 128
       fetch-max-wait: 2s
